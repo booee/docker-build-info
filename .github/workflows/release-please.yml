@@ -2,7 +2,12 @@ on:
   push:
     branches:
       - main
-name: release-please
+name: Autorelease
+
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   release-please:
     runs-on: ubuntu-latest
@@ -26,5 +31,5 @@ jobs:
 
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: ${{ steps.release.outputs.release_created }}
