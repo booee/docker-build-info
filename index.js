@@ -3,6 +3,7 @@ const path = require('path')
 const { execSync } = require('child_process')
 
 const FILE_PATH_DEFAULT = './build-info.json'
+const LABEL_NAMESPACE_INTERNAL = 'buildinfo'
 
 async function load (opts) {
   const {
@@ -20,7 +21,7 @@ async function create (opts) {
     defaults,
     filePath = FILE_PATH_DEFAULT,
     logger
-  } = opts
+  } = opts || {}
 
   if (!filePath) throw new Error(`a filePath is required, eg "${FILE_PATH_DEFAULT}"`)
 
@@ -73,9 +74,9 @@ async function determineBuildVersion (opts) {
   let version = base
   if (!version) {
     logger?.info?.('Deriving version base locally')
-    const derivedBase = gitDescribeTags()
+    version = gitDescribeTags()
 
-    if (!derivedBase) {
+    if (!version) {
       throw new Error('Unable to derive version base')
     }
   }
@@ -95,7 +96,9 @@ function getDockerBuildArgs (buildInfo, opts) {
   let labels = []
 
   if (buildInfo) {
-    const labelPrefix = labelNamespace ? `${labelNamespace}.` : ''
+    let labelPrefix = labelNamespace ? `${labelNamespace}.` : ''
+    labelPrefix += `${LABEL_NAMESPACE_INTERNAL}.`
+
     labels = Object.keys(buildInfo)?.map(key => {
       // low-effort formatting/escaping with JSON.stringify
       return '--label ' + JSON.stringify(`${labelPrefix}${key}=${String(buildInfo[key])}`)
@@ -109,6 +112,29 @@ function getDockerBuildArgs (buildInfo, opts) {
   ]
 
   return args?.join(' ')
+}
+
+function getBuildInfoFromDockerImage (imageDescription, opts) {
+  const {
+    labelNamespace
+  } = opts || {}
+
+  let image = imageDescription
+  if (Array.isArray(image)) image = image[0]
+
+  const dockerLabels = image?.Config?.Labels
+
+  let labelPrefix = labelNamespace ? `${labelNamespace}.` : ''
+  labelPrefix += `${LABEL_NAMESPACE_INTERNAL}.`
+
+  const buildInfo = {}
+  Object.keys(dockerLabels).forEach(key => {
+    if (key.startsWith(labelPrefix)) {
+      const buildInfoKey = key.slice(labelPrefix.length)
+      buildInfo[buildInfoKey] = dockerLabels[key]
+    }
+  })
+  return buildInfo
 }
 
 function readFile (filePath) {
@@ -159,5 +185,6 @@ module.exports = {
   create,
   load,
   determineBuildVersion,
-  getDockerBuildArgs
+  getDockerBuildArgs,
+  getBuildInfoFromDockerImage
 }

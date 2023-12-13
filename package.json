@@ -9,7 +9,8 @@
     "index.js"
   ],
   "scripts": {
-    "lint": "standard"
+    "lint": "standard",
+    "test": "npm run lint"
   },
   "license": "ISC",
   "author": "booee",
