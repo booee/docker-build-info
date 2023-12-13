@@ -2,7 +2,7 @@
   "name": "docker-build-info",
   "version": "0.1.0",
   "description": "Conventional metadata for your builds",
-  "main": "api.js",
+  "main": "index.js",
   "bin": "cli.js",
   "files": [
     "cli.js",
