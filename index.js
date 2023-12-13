@@ -17,7 +17,7 @@ async function load (opts) {
 
 async function create (opts) {
   const {
-    buildInfo: overrides,
+    defaults,
     filePath = FILE_PATH_DEFAULT,
     logger
   } = opts
@@ -33,7 +33,7 @@ async function create (opts) {
     commitSha: null,
     commitStatus: null,
     commitTitle: null,
-    ...overrides
+    ...defaults
   }
 
   if (!buildInfo.buildVersion) {

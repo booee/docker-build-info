@@ -14,7 +14,7 @@ sywac
     setup: sywac => {
       sywac
         .array('-p, --prop <key=value>', {
-          desc: 'Set a property value',
+          desc: 'Set a default property value',
           coerce: (props) => {
             const result = {}
             props.forEach(propString => {
@@ -86,8 +86,10 @@ async function runCreateCommand (argv, context) {
 
   const logger = await getLogger(debug)
 
+  // TODO: prop type hinting
+
   const buildInfo = await create({
-    buildInfo: prop,
+    defaults: prop,
     filePath,
     logger
   })
@@ -134,7 +136,7 @@ async function runDockerArgsCommand (argv, context) {
   const buildInfo = await load({ filePath })
   if (buildInfo) {
     const dockerArgs = getDockerBuildArgs(buildInfo)
-    writeStdOut(dockerArgs.string)
+    writeStdOut(dockerArgs)
   } else {
     logger?.info?.(`Build info not found at ${filePath}`)
   }
