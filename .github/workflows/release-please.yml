@@ -1,9 +1,9 @@
+name: Autorelease
+
 on:
   push:
     branches:
       - main
-
-name: Autorelease
 
 permissions:
   contents: write

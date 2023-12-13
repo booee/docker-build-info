@@ -28,6 +28,9 @@ sywac
           desc: 'Path of build info file',
           defaultValue: FILE_PATH_DEFAULT
         })
+        .boolean('-d, --dockerArgs', {
+          desc: 'Output docker args from created build info'
+        })
     },
     run: runCreateCommand
   })
@@ -79,9 +82,10 @@ sywac
 
 async function runCreateCommand (argv, context) {
   const {
+    debug,
+    dockerArgs,
     filePath,
-    prop,
-    debug
+    prop
   } = argv
 
   const logger = await getLogger(debug)
@@ -95,6 +99,11 @@ async function runCreateCommand (argv, context) {
   })
 
   logger?.info?.(JSON.stringify(buildInfo, undefined, 2))
+
+  if (dockerArgs) {
+    const dockerArgs = getDockerBuildArgs(buildInfo)
+    writeStdOut(dockerArgs)
+  }
 }
 
 async function runBuildVersionCommand (argv, context) {
