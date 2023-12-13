@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { execSync } = require('child_process')
 
-const FILE_PATH_DEFAULT = './build-metadata.json'
+const FILE_PATH_DEFAULT = './build-info.json'
 
 async function load (opts) {
   const {
@@ -17,7 +17,7 @@ async function load (opts) {
 
 async function create (opts) {
   const {
-    buildMetadata: overrides,
+    buildInfo: overrides,
     filePath = FILE_PATH_DEFAULT,
     logger
   } = opts
@@ -26,7 +26,7 @@ async function create (opts) {
 
   const createdAt = new Date()
 
-  const buildMetadata = {
+  const buildInfo = {
     buildId: createdAt.getTime(), // need a guid, using epoch as a stand-in
     buildTimestamp: createdAt.toISOString(),
     buildVersion: null,
@@ -36,31 +36,31 @@ async function create (opts) {
     ...overrides
   }
 
-  if (!buildMetadata.buildVersion) {
+  if (!buildInfo.buildVersion) {
     logger?.info?.('Deriving buildVersion locally')
-    buildMetadata.buildVersion = await determineBuildVersion({ logger })
+    buildInfo.buildVersion = await determineBuildVersion({ logger })
   }
 
-  if (!buildMetadata.commitSha) {
+  if (!buildInfo.commitSha) {
     logger?.info?.('Deriving commit sha locally')
-    buildMetadata.commitSha = gitCommitSha()
+    buildInfo.commitSha = gitCommitSha()
   }
 
-  if (!buildMetadata.commitTitle) {
+  if (!buildInfo.commitTitle) {
     logger?.info?.('Deriving commit title locally')
     const commitMessage = gitCommitMessage()
-    buildMetadata.commitTitle = commitMessage?.split('\n')[0] // denote title by first line break
+    buildInfo.commitTitle = commitMessage?.split('\n')[0] // denote title by first line break
   }
 
-  if (!buildMetadata.commitStatus) {
+  if (!buildInfo.commitStatus) {
     logger?.info?.('Deriving commit status locally')
-    buildMetadata.commitStatus = gitIsDirty() ? 'dirty' : 'clean'
+    buildInfo.commitStatus = gitIsDirty() ? 'dirty' : 'clean'
   }
 
-  logger?.info?.(`Creating build metadata: ${filePath}`)
-  writeFile(filePath, JSON.stringify(buildMetadata, undefined, 2))
+  logger?.info?.(`Creating build info: ${filePath}`)
+  writeFile(filePath, JSON.stringify(buildInfo, undefined, 2))
 
-  return buildMetadata
+  return buildInfo
 }
 
 async function determineBuildVersion (opts) {
@@ -87,18 +87,18 @@ async function determineBuildVersion (opts) {
   return version
 }
 
-function getDockerBuildArgs (buildMetadata, opts) {
+function getDockerBuildArgs (buildInfo, opts) {
   const {
     labelNamespace
   } = opts || {}
 
   let labels = []
 
-  if (buildMetadata) {
+  if (buildInfo) {
     const labelPrefix = labelNamespace ? `${labelNamespace}.` : ''
-    labels = Object.keys(buildMetadata)?.map(key => {
+    labels = Object.keys(buildInfo)?.map(key => {
       // low-effort formatting/escaping with JSON.stringify
-      return '--label ' + JSON.stringify(`${labelPrefix}${key}=${String(buildMetadata[key])}`)
+      return '--label ' + JSON.stringify(`${labelPrefix}${key}=${String(buildInfo[key])}`)
     })
   }
 

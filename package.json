@@ -1,5 +1,5 @@
 {
-  "name": "build-metadata",
+  "name": "docker-build-info",
   "version": "0.1.0",
   "description": "Conventional metadata for your builds",
   "main": "api.js",
@@ -13,7 +13,7 @@
   },
   "license": "ISC",
   "author": "booee",
-  "repository": "booee/build-metadata",
+  "repository": "booee/docker-build-info",
   "dependencies": {
     "sywac": "^1.3.0"
   },

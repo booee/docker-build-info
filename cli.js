@@ -10,7 +10,7 @@ sywac
     desc: 'Debug mode, show inline log outputs'
   })
   .command('create', {
-    desc: 'Create build metadata file',
+    desc: 'Create build info file',
     setup: sywac => {
       sywac
         .array('-p, --prop <key=value>', {
@@ -25,7 +25,7 @@ sywac
           }
         })
         .string('--filePath <filePath>', {
-          desc: 'Path of build metadata file',
+          desc: 'Path of build info file',
           defaultValue: FILE_PATH_DEFAULT
         })
     },
@@ -45,22 +45,22 @@ sywac
     run: runBuildVersionCommand
   })
   .command('inspect', {
-    desc: 'Inspect an existing build metadata file',
+    desc: 'Inspect an existing build info file',
     setup: sywac => {
       sywac
         .string('--filePath <filePath>', {
-          desc: 'Path of build metadata file',
+          desc: 'Path of build info file',
           defaultValue: FILE_PATH_DEFAULT
         })
     },
     run: runInspectCommand
   })
   .command('docker-args', {
-    desc: 'Determine docker build args from an existing build metadata file',
+    desc: 'Determine docker build args from an existing build info file',
     setup: sywac => {
       sywac
         .string('--filePath <filePath>', {
-          desc: 'Path of build metadata file',
+          desc: 'Path of build info file',
           defaultValue: FILE_PATH_DEFAULT
         })
         .string('--labelNamespace <labelNamespace>', {
@@ -86,13 +86,13 @@ async function runCreateCommand (argv, context) {
 
   const logger = await getLogger(debug)
 
-  const buildMetadata = await create({
-    buildMetadata: prop,
+  const buildInfo = await create({
+    buildInfo: prop,
     filePath,
     logger
   })
 
-  logger?.info?.(JSON.stringify(buildMetadata, undefined, 2))
+  logger?.info?.(JSON.stringify(buildInfo, undefined, 2))
 }
 
 async function runBuildVersionCommand (argv, context) {
@@ -115,11 +115,11 @@ async function runInspectCommand (argv, context) {
 
   const logger = await getLogger(debug)
 
-  const buildMetadata = await load({ filePath })
-  if (buildMetadata) {
-    writeStdOut(JSON.stringify(buildMetadata, undefined, 2))
+  const buildInfo = await load({ filePath })
+  if (buildInfo) {
+    writeStdOut(JSON.stringify(buildInfo, undefined, 2))
   } else {
-    logger?.info?.(`Metadata not found at ${filePath}`)
+    logger?.info?.(`Build info not found at ${filePath}`)
   }
 }
 
@@ -131,12 +131,12 @@ async function runDockerArgsCommand (argv, context) {
 
   const logger = await getLogger(debug)
 
-  const buildMetadata = await load({ filePath })
-  if (buildMetadata) {
-    const dockerArgs = getDockerBuildArgs(buildMetadata)
+  const buildInfo = await load({ filePath })
+  if (buildInfo) {
+    const dockerArgs = getDockerBuildArgs(buildInfo)
     writeStdOut(dockerArgs.string)
   } else {
-    logger?.info?.('No metadata found')
+    logger?.info?.(`Build info not found at ${filePath}`)
   }
 }
 

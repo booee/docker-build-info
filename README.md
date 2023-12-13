@@ -1,16 +1,16 @@
-# build-metadata
+# docker-build-info
 
-A light weight tool to provide conventional metadata for your app builds.
+A light weight tool to provide conventional metadata for your docker builds.
 
 Someone may have written a better version of this tool but I couldn't find it.
 
 #### System Dependencies
 
-This tool was written for use in mac/linux systems and assumes you have `git` installed. I've tried to keep things OS-independent, but I have not tested or verified other systems.
+This was written for use in mac/linux systems and assumes you have `git` installed. I've tried to keep things OS-independent, but I have not tested or verified other systems.
 
 ### Getting Started
 
-The "out-of-the-box" metadata captured:
+The "out-of-the-box" info captured:
 
 - `buildId`: A unique id to represent the build.
 - `buildTimestamp`: When the build was created.
@@ -25,39 +25,39 @@ Since each codebase is different, all of these standard values can be easily cus
 
 This CLI is primarily a build tool designed to provide quick and easy results
 
-To generate the build metadata file in your project (`build-metatdata.json`), navigate to the project root and run:
+To generate the build info file in your project (`build-info.json`), navigate to the project root and run:
 ```
-npx build-metadata create
-```
-
-If you're curious, you can inspect the generated metadata file
-```
-npx build-metadata inspect
+npx docker-build-info create
 ```
 
-Need to customize the metadata that's captured? Just override one (or all) of the values... or provide your own
+If you're curious, you can inspect the generated info file
 ```
-npx build-metadata create -p "buildVersion=v1.2.0--test-build-1" -p "workflowRunId=${{ github.run_id }}"
+npx docker-build-info inspect
 ```
 
-And if you're running this as part of a docker image build, the CLI can give you some easy-to-use build arguments to add this metadata directly onto your docker image
+Need to customize the info that's captured? Just override one (or all) of the values... or provide your own
 ```
-docker build $(npx build-metadata docker-args) .
+npx docker-build-info create -p "buildVersion=v1.2.0--test-build-1" -p "workflowRunId=${{ github.run_id }}"
+```
+
+And if you're running this as part of a docker image build, the CLI can give you some easy-to-use build arguments to add this info directly onto your docker image
+```
+docker build $(npx docker-build-info docker-args) .
 ```
 
 #### API
 
-You can also use `build-metadata` in your project at runtime as a convenient way to interact with the metadata.
+You can also use `docker-build-info` in your project at runtime as a convenient way to access the generated build info.
 
 Install via
 ```
-npm install build-metadata
+npm install docker-build-info
 ```
 
-You can access the existing build metadata at runtime via:
+You can access the existing build info at runtime via:
 ```
-const buildMetadata = require('build-metadata')
+const dockerBuildInfo = require('docker-build-info')
 
-const console.log(JSON.stringify(buildMetadata.load(), undefined, 2))
+const console.log(JSON.stringify(dockerBuildInfo.load(), undefined, 2))
 ```
 
