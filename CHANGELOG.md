@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/booee/docker-build-info/compare/v0.4.0...v0.5.0) (2023-12-13)
+
+
+### Features
+
+* parse labels from image description, also fixes build-version  command([#5](https://github.com/booee/docker-build-info/issues/5)) ([d8f0696](https://github.com/booee/docker-build-info/commit/d8f06968c8afbac2b1beaf115ecafada06883997))
+
 ## [0.4.0](https://github.com/booee/docker-build-info/compare/v0.3.0...v0.4.0) (2023-12-13)
 
 
