@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/booee/docker-build-info/compare/v0.3.0...v0.4.0) (2023-12-13)
+
+
+### Features
+
+* add docker args option to create CLI command([#3](https://github.com/booee/docker-build-info/issues/3)) ([4c31a89](https://github.com/booee/docker-build-info/commit/4c31a895774f8cefe0c9603d37993563f51a374f))
+
 ## [0.3.0](https://github.com/booee/docker-build-info/compare/v0.2.0...v0.3.0) (2023-12-13)
 
 
