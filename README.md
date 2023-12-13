@@ -42,7 +42,12 @@ npx docker-build-info create -p "buildVersion=v1.2.0--test-build-1" -p "isTestBu
 
 And if you're running this as part of a docker image build, the CLI can give you some easy-to-use build arguments to add this info directly onto your docker image
 ```
-docker build $(npx docker-build-info docker-args) .
+docker build . $(npx docker-build-info docker-args)
+```
+
+You can even do everything at once
+```
+docker build . $(npx docker-build-info create -p "buildVersion=v1.2.0--test-build-1" -p "isTestBuild=true" --dockerArgs)
 ```
 
 #### API
@@ -66,7 +71,7 @@ async function buildDockerImage (customBuildVersion) {
     }
   })
 
-  execSync(`docker build . ${ dockerBuildInfo.getDockerBuildArgs(buildInfo)}`)
+  execSync(`docker build . ${dockerBuildInfo.getDockerBuildArgs(buildInfo)}`)
 }
 ```
 
