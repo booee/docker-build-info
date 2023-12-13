@@ -1,6 +1,6 @@
 {
   "name": "docker-build-info",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Conventional metadata for your builds",
   "main": "index.js",
   "bin": "cli.js",
