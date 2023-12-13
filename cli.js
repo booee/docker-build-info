@@ -67,7 +67,7 @@ sywac
           defaultValue: FILE_PATH_DEFAULT
         })
         .string('--labelNamespace <labelNamespace>', {
-          desc: 'Prefix labels with a custom namespace, eg com.someorg.myproject'
+          desc: 'Prefix labels with a custom namespace, eg com.someorg.myproject',
         })
     },
     run: runDockerArgsCommand
