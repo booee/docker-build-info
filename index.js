@@ -5,7 +5,7 @@ const { execSync } = require('child_process')
 const FILE_PATH_DEFAULT = './build-info.json'
 const LABEL_NAMESPACE_INTERNAL = 'buildinfo'
 
-async function load (opts) {
+function load (opts) {
   const {
     filePath = FILE_PATH_DEFAULT,
     logger
@@ -16,7 +16,7 @@ async function load (opts) {
   return JSON.parse(fileData)
 }
 
-async function create (opts) {
+function create (opts) {
   const {
     defaults,
     filePath = FILE_PATH_DEFAULT,
@@ -39,7 +39,7 @@ async function create (opts) {
 
   if (!buildInfo.buildVersion) {
     logger?.info?.('Deriving buildVersion locally')
-    buildInfo.buildVersion = await determineBuildVersion({ logger })
+    buildInfo.buildVersion = determineBuildVersion({ logger })
   }
 
   if (!buildInfo.commitSha) {
@@ -64,7 +64,7 @@ async function create (opts) {
   return buildInfo
 }
 
-async function determineBuildVersion (opts) {
+function determineBuildVersion (opts) {
   const {
     base,
     logger,
