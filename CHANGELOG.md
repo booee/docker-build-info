@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/booee/docker-build-info/compare/v0.5.0...v0.6.0) (2023-12-14)
+
+
+### Features
+
+* remove unnecessary async/await ([#7](https://github.com/booee/docker-build-info/issues/7)) ([989a6a4](https://github.com/booee/docker-build-info/commit/989a6a4b7a87fd4d1914ae02afd4c9e34ef08127))
+
 ## [0.5.0](https://github.com/booee/docker-build-info/compare/v0.4.0...v0.5.0) (2023-12-13)
 
 
