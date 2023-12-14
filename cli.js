@@ -88,11 +88,11 @@ async function runCreateCommand (argv, context) {
     prop
   } = argv
 
-  const logger = await getLogger(debug)
+  const logger = getLogger(debug)
 
   // TODO: prop type hinting
 
-  const buildInfo = await create({
+  const buildInfo = create({
     defaults: prop,
     filePath,
     logger
@@ -113,8 +113,8 @@ async function runBuildVersionCommand (argv, context) {
     suffix
   } = argv
 
-  const logger = await getLogger(debug)
-  const version = await determineBuildVersion({ base, logger, suffix })
+  const logger = getLogger(debug)
+  const version = determineBuildVersion({ base, logger, suffix })
   writeStdOut(version)
 }
 
@@ -124,9 +124,9 @@ async function runInspectCommand (argv, context) {
     filePath
   } = argv
 
-  const logger = await getLogger(debug)
+  const logger = getLogger(debug)
 
-  const buildInfo = await load({ filePath })
+  const buildInfo = load({ filePath })
   if (buildInfo) {
     writeStdOut(JSON.stringify(buildInfo, undefined, 2))
   } else {
@@ -140,9 +140,9 @@ async function runDockerArgsCommand (argv, context) {
     filePath
   } = argv
 
-  const logger = await getLogger(debug)
+  const logger = getLogger(debug)
 
-  const buildInfo = await load({ filePath })
+  const buildInfo = load({ filePath })
   if (buildInfo) {
     const dockerArgs = getDockerBuildArgs(buildInfo)
     writeStdOut(dockerArgs)
@@ -155,7 +155,7 @@ function writeStdOut (str = '') {
   process.stdout.write(str + '\n')
 }
 
-async function getLogger (isDebug) {
+function getLogger (isDebug) {
   let logger
 
   if (isDebug) {
