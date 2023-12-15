@@ -26,27 +26,27 @@ Since each codebase is different, all of these standard values can be easily cus
 This CLI is engineered to provide quick and easy results
 
 To generate the build info file in your project (`build-info.json`), navigate to the project root and run:
-```
+```console
 npx docker-build-info create
 ```
 
 If you're curious, you can inspect the generated info file
-```
+```console
 npx docker-build-info inspect
 ```
 
 Need to customize the info that's captured? Just override one (or all) of the values... or provide your own
-```
+```console
 npx docker-build-info create -p "buildVersion=v1.2.0--test-build-1" -p "isTestBuild=true"
 ```
 
 And if you're running this as part of a docker image build, the CLI can give you some easy-to-use build arguments to add this info directly onto your docker image
-```
+```console
 docker build . $(npx docker-build-info docker-args)
 ```
 
 You can even do everything at once
-```
+```console
 docker build . $(npx docker-build-info create -p "buildVersion=v1.2.0--test-build-1" -p "isTestBuild=true" --dockerArgs)
 ```
 
@@ -55,17 +55,17 @@ docker build . $(npx docker-build-info create -p "buildVersion=v1.2.0--test-buil
 You can also use `docker-build-info` in your project at runtime as a convenient way to access the generated build info or create a custom build script in node.
 
 Install via
-```
+```console
 npm install docker-build-info
 ```
 
 Then you can use it to create a custom build script in javascript
-```
+```js
 const dockerBuildInfo = require('docker-build-info')
 import { execSync } from 'child_process'
 
 async function buildDockerImage (customBuildVersion) {
-  const buildInfo = await dockerBuildInfo.create({
+  const buildInfo = dockerBuildInfo.create({
     defaults: {
       buildVersion: customBuildVersion
     }
@@ -76,7 +76,7 @@ async function buildDockerImage (customBuildVersion) {
 ```
 
 You can also easily reference the created build info at runtime (assuming the file is accessible)
-```
+```js
 const dockerBuildInfo = require('docker-build-info')
 
 const buildInfo = dockerBuildInfo.load()
